@@ -4,8 +4,6 @@ const val ONE_WATERING = 15
 const val SOIL_MOISTURE_MAX = 100
 fun main() {
     var soilMoistureNow = 30
-
-
     while (soilMoistureNow < SOIL_MOISTURE_MAX) {
 
         soilMoistureNow += ONE_WATERING
