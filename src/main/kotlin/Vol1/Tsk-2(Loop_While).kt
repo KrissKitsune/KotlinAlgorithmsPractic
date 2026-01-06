@@ -1,5 +1,6 @@
 package Vol1
-const  val ONE_WATERING = 15
+
+const val ONE_WATERING = 15
 const val SOIL_MOISTURE_MAX = 100
 fun main() {
     var soilMoistureNow = 30
