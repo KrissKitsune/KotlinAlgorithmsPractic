@@ -1,7 +1,6 @@
 package Vol1
 
 fun main() {
-//    var temperature: Double
     println("\tТаблица конверсии температуры из Фаренгейта в Цельсия:\n\tФаренгейт \t|\tЦельсия")
     for (temperature in 100..200 step 5) {
         val b = temperatureConversation(temperature.toDouble())
