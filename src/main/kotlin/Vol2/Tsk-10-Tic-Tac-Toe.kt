@@ -1,5 +1,7 @@
 package Vol2
 
+const val ASCII_A_CODE = 65
+
 fun main() {
     println("Добро пожаловать в Крестики-нолики!")
 
@@ -33,7 +35,7 @@ fun main() {
             println("Победа за игроком: $currentPlayer")
             gameOver = true
         } else if (chekDraw) {
-            println("Ничья!")
+            println("Ничья! Больше нет клеток для хода!")
             gameOver = true
         } else continue
     }
@@ -54,79 +56,51 @@ fun printBoard(board: Array<Array<Char>>) {
 
 fun makeMove(movePlayer: String, currentPlayer: Char, board: Array<Array<Char>>) {
     val moveString = movePlayer.substring(1)
-    val moveColumn = movePlayer.first()
-    if (moveColumn == 'A') {
-        if (moveString == "1") {
-            board[0][0] = currentPlayer
-        } else if (moveString == "2") {
-            board[0][1] = currentPlayer
-        } else board[0][2] = currentPlayer
-    } else if (moveColumn == 'B') {
-        if (moveString == "1") {
-            board[1][0] = currentPlayer
-        } else if (moveString == "2") {
-            board[1][1] = currentPlayer
-        } else board[1][2] = currentPlayer
-    } else {
-        if (moveString == "1") {
-            board[2][0] = currentPlayer
-        } else if (moveString == "2") {
-            board[2][1] = currentPlayer
-        } else board[2][2] = currentPlayer
-    }
+    val moveColumn = movePlayer.uppercase().first()
+    val row = moveColumn.code - ASCII_A_CODE
+    val col = moveString.toInt() - 1
+    board[row][col] = currentPlayer
 }
 
 fun isValidMove(movePlayer: String, board: Array<Array<Char>>): Boolean {
-
     val moveString = movePlayer.substring(1)
-    val moveColumn = movePlayer.first().toString()
-    val validMove: Boolean
-    var k: Int
-    for (i in board.indices) {
-        for (j in board[i].indices) {
-            if (board[i][j] == '_') k = 0 else k = 1
-        }
-    }
-    k = if (((moveColumn == "A") || (moveColumn == "B") || (moveColumn == "C")) &&
-        ((moveString == "1") || (moveString == "2") || (moveString == "3"))
-    ) 0 else 1
-    if (k < 1) {
-        validMove = true
-    } else validMove = false
-    return validMove
+    val moveColumn = movePlayer.uppercase().first()
+    val row = moveColumn.code - ASCII_A_CODE
+    val col = moveString.toInt() - 1
+    if (board[row][col] != '_') return false
+    if (!((moveColumn == 'A') || (moveColumn == 'B') || (moveColumn == 'C')) ||
+        !((moveString == "1") || (moveString == "2") || (moveString == "3"))
+    ) return false
+    return true
 }
 
 fun chekWin(currentPlayer: Char, board: Array<Array<Char>>): Boolean {
-    var sumChek = 0
-    var crossChek: Boolean
-    var chekWin = false
     for (i in board.indices) {
-        if (board[i][i] == currentPlayer) {
-            for (j in board.indices) {
-                if (board[i][j] == currentPlayer) {
-                    sumChek++
-                    //println("сумма очков $sumChek")
-                }
-            }
-        }
+        if (
+            board[i][0] == currentPlayer
+            && board[i][1] == currentPlayer
+            && board[i][2] == currentPlayer
+        ) return true
+        if (
+            board[0][i] == currentPlayer
+            && board[1][i] == currentPlayer
+            && board[2][i] == currentPlayer
+        ) return true
     }
     if ((board[1][1] == currentPlayer) &&
-        ((board[0][0] == currentPlayer) || (board[2][2] == currentPlayer)
-                || (board[2][0] == currentPlayer) || (board[0][2] == currentPlayer))
-    ) crossChek = true
-    else crossChek = false
-    if ((sumChek >= 3) || (crossChek)) chekWin = true
-    return chekWin
+        ((board[0][0] == currentPlayer) && (board[2][2] == currentPlayer)
+                || (board[2][0] == currentPlayer) && (board[0][2] == currentPlayer))
+    ) return true
+    return false
 }
 
 fun chekDraw(board: Array<Array<Char>>): Boolean {
     var k = 0
-    var chekDraw = false
     for (i in board.indices) {
         for (j in board[i].indices) {
             if (board[i][j] != '_') k++
         }
-        if (k == 9) chekDraw = true
+        if (k == 9) return true
     }
-    return chekDraw
+    return false
 }
